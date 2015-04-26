@@ -1,0 +1,13 @@
+This is a port of the StellarisWare 10636 enet_ptpd LM3S9B96 example, to an EK-TM4C1294XL using TivaWare 2.1.0.12573
+
+This project contains the following version of source files from TivaWare:
+third_party/lwip-1.4.1/src/core/ipv4/ip.c
+   Modified the ip_input() function to cause PTPD messages to be passed to the the UDP protocol without having
+   a multicast interface configured. The code was copied from the StellarisWare version of the ip_input() function.
+   Consider modifying the PTPD code to join the PTP multicast group to avoid this modification.
+   
+third_party/lwip-1.4.1/ports/tiva-tm4c129/netif/tiva-tm4c129.c
+   The tivaif_receive() function has been changed to call lwIPHostGetTime() to obtain the receive timestamp, rather
+   than using the timestamp placed in the receive descriptor by the hardware.
+   This is a temporary modification due to the code in enet_ptpd.c maintaining it's own clock rather than using the
+   EMAC system time.
