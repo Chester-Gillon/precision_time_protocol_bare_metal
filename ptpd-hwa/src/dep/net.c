@@ -69,6 +69,7 @@ UInteger32 findIface(Octet *ifaceName, UInteger8 *communicationTechnology,
   int i, flags;
   struct ifconf data;
   struct ifreq device[IFCONF_LENGTH];
+  UInteger32 ifAddr;
 
   data.ifc_len = sizeof(device);
   data.ifc_req = device;
@@ -139,6 +140,7 @@ UInteger32 findIface(Octet *ifaceName, UInteger8 *communicationTechnology,
       PERROR("failed to get ip address");
       return 0;
     }
+  ifAddr = ((struct sockaddr_in *)&device[i].ifr_addr)->sin_addr.s_addr;
 
   struct hwtstamp_config hwconfig;
   memset(&hwconfig, 0, sizeof(hwconfig));
@@ -177,7 +179,7 @@ UInteger32 findIface(Octet *ifaceName, UInteger8 *communicationTechnology,
 
   netPath->eventSockIFR = device[i];
 
-  return ((struct sockaddr_in *)&device[i].ifr_addr)->sin_addr.s_addr;
+  return ifAddr;
 
 #elif defined(BSD_INTERFACE_FUNCTIONS)
 
